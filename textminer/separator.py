@@ -8,27 +8,75 @@ def words(input):
         return new_list.split(' ')
     except:
         return None
-    #return re.findall(r'^[a-zA-Z0-9\-\s]+[a-zA-Z]$', input)
 
 
 def phone_number(input):
-    #obb = re.match(r'^([0-9]{3})', input)
-    bob = re.match(r'\(([0-9]{3})', input)
-    bob1 = re.match(r'\(([0-9]{3})\).?([0-9]{3})', input)
-    bob2 = re.match(r'\(([0-9]{3})\).?([0-9]{3}).?([0-9]{4})', input)
-
-    print(bob.group(1))
-    print(bob1.group(2))
-    print(bob2.group(3))
+    numbers = re.findall(r'([0-9])', input)
+    if len(numbers) != 10:
+        return None
     new_dict = {}
-    new_dict['area_code']=bob.group(1)
-    new_dict['number'] = str(bob1.group(2)) + '-' + str(bob2.group(3))
-    print(new_dict)
-    return new_dict
-    # print(obb.group(1))
-    # #print(obb.group(0))
-    # print(obb.groups())
-    #print(bob.group(2))
-    # .?([0-9]{3}).?([0-9]{4})
+    new_dict['area_code'] = ''.join(numbers[0:3])
+    first_part = ''.join(numbers[3:6])
+    second_part = ''.join(numbers[6:10])
+    new_dict['number'] = first_part + '-' + second_part
+    return(new_dict)
 
-#?P<area_code>
+
+def money(input):
+    if re.findall(r'^\$([0-9]+(,[0-9]{3})*)(\.[0-9]{2})?$', input):
+        numbers = re.findall(r'([0-9])', input)
+        symbol = re.findall(r'\$', input)
+        cents = re.findall(r'\.[0-9]{2}$', input)
+        if cents:
+            numbers = numbers[:-2]
+        new_dict = {}
+        new_dict['currency'] = ''.join(symbol[0])
+        if cents:
+            new_dict['amount'] = float(''.join(numbers)+cents[0])
+        else:
+            new_dict['amount'] = float(''.join(numbers))
+        print(new_dict)
+        return(new_dict)
+    else:
+        return None
+
+
+def zipcode(input):
+    zip_num = re.findall(r'([0-9])', input)
+    if len(zip_num) == 5:
+        new_dict = {}
+        new_dict['zip'] = ''.join(zip_num)
+        new_dict['plus4'] = None
+        print(new_dict)
+        return new_dict
+    elif len(zip_num) == 9:
+        new_dict = {}
+        new_dict['zip'] = ''.join(zip_num[0:5])
+        new_dict['plus4'] = ''.join(zip_num[5:9])
+        print(new_dict)
+        return new_dict
+
+
+def date(input):
+    if re.findall(r'^[0-9]+/[0-9]+/[0-9]{4}', input):
+        month = re.findall(r'^[0-9]+/', input)
+        day = re.findall(r'/[0-9]+/', input)
+        year = re.findall(r'/[0-9]+$', input)
+        new_dict = {}
+        new_dict['month'] = int(month[0][:-1])
+        new_dict['day'] = int(day[0][1:-1])
+        new_dict['year'] = int(year[0][1:])
+        print(new_dict)
+        return new_dict
+    elif re.findall(r'^[0-9]+-[0-9]+-[0-9]+', input):
+        year = re.findall(r'^[0-9]{4}', input)
+        day = re.findall(r'-[0-9]+$', input)
+        month = re.findall(r'-[0-9]+-', input)
+        new_dict = {}
+        new_dict['day'] = int(day[0][1:])
+        new_dict['month'] = int(month[0][1:-1])
+        new_dict['year'] = int(year[0])
+        return(new_dict)
+
+    else:
+        return None
