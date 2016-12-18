@@ -1,12 +1,12 @@
 # express-yourself
 this assignment was to get familiar with regular expressions.
 to use this project, run py.test in the terminal to run through all
-of the validator, extractor, and some of the separator tests. i've
-commented out the tests that were not satisfied.
+of the validator, extractor, and the separator tests. all tests
+prior to advanced are working and passing. 
 
 files:
 
-README.md : file you are reading now 
+README.md : file you are reading now
 validator.py : has the functions to satisfy test_validator.py
 test_validator.py : has the tests for validator.py
 separator.py : has the functions to satisfy test_separator.py
